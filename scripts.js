@@ -121,3 +121,98 @@ let okIterator = "Ok"[Symbol.iterator]();
 console.log(okIterator.next());
 console.log(okIterator.next());
 console.log(okIterator.next())
+
+
+
+// class Vec that represents a vector in two-dimensional space. It takes x and y parameters (numbers), that it saves to properties of the same name.
+
+class Vec {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+  }
+
+  plus(other) {
+    return new Vec(this.x + other.x, this.y + other.y);
+  }
+
+  minus(other) {
+    return new Vec(this.x - other.x, this.y - other.y);
+  }
+
+  get length() {
+    return Math.sqrt(this.x * this.x + this.y * this.y);
+  }
+}
+
+console.log(new Vec(1, 2).plus(new Vec(2, 3)));
+console.log(new Vec(1, 2).minus(new Vec(2, 3))); 
+console.log(new Vec(3, 4).length);
+
+
+
+
+
+
+/*class called Group (since Set is already taken). Like Set, it has add, delete, and has methods. Its constructor creates an empty group, add adds a value to the group (but only if it isn’t already a member), delete removes its argument from the group (if it was a member), and has returns a Boolean value indicating whether its argument is a member of the group.*/
+
+class Group {
+  constructor() {
+    this.members = [];
+  }
+
+  add(value) {
+    if (!this.has(value)) {
+      this.members.push(value);
+    }
+  }
+
+  delete(value) {
+    this.members = this.members.filter(v => v !== value);
+  }
+
+  has(value) {
+    return this.members.includes(value);
+  }
+
+  static from(iterable) {
+    let group = new Group();
+    for (let value of iterable) {
+      group.add(value);
+    }
+    return group;
+  }
+  
+//   Make the Group class iterable
+  [Symbol.iterator]() {
+    return new GroupIterator(this);
+  }
+}
+
+class GroupIterator {
+  constructor(group) {
+    this.group = group;
+    this.position = 0;
+  }
+
+  next() {
+    if (this.position >= this.group.members.length) {
+      return { done: true };
+    } else {
+      let result = { value: this.group.members[this.position], done: false };
+      this.position++;
+      return result;
+    }
+  }
+}
+
+for (let value of Group.from(["a", "b", "c"])) {
+  console.log(value);
+}
+
+let group = Group.from([10, 20]);
+console.log(group.has(10));
+console.log(group.has(30));
+group.add(10);
+group.delete(10);
+console.log(group.has(10));
