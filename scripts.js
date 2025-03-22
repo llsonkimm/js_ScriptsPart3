@@ -33,7 +33,7 @@ console.log(finder.find([4, 5]));
 
 let empty = {};
 console.log(empty.toSpring);
-console.log(empty.toSpring());
+console.log(empty.toSpring);
 
 //When an object gets a request for a property that it doesn’t have, its prototype will be searched for the property. If that doesn’t have it, the prototype’s prototype is searched, and so on until an object without prototype is reached (Object.prototype is such an object)./
 
@@ -83,3 +83,41 @@ console.log([1, 2].toString());
 
 // Calling toString on an array gives a result similar to calling .join(",") on it—it puts commas between the values in the array. 
 console.log(Object.prototype.toString.call([1, 2]));
+
+
+
+// Symbols
+
+/*Symbols are values created with the Symbol function. Unlike strings, newly created symbols are unique—you cannot create the same symbol twice.*/
+
+let sym = Symbol("name");
+console.log(sym == Symbol("name"));
+
+/*Being both unique and usable as property names makes symbols suitable for defining interfaces that can peacefully live alongside other properties, no matter what their names are.*/
+
+const length = Symbol("length");
+Array.prototype[length] = 0;
+
+console.log([1,2].length);
+
+console.log([1,2][length]);
+
+/*It is possible to include symbol properties in object expressions and classes by using square brackets around the property name. That causes the expression between the brackets to be evaluated to produce the property name, analogous to the square bracket property access notation.*/
+
+let myTrip = {
+    length : 2,
+    0 : "Lankwitz",
+    1 : "Babelsberg",
+    [length]: 21500
+};
+console.log(myTrip[length], myTrip.length);
+
+
+// The iterator interface
+
+/*Note that the next, value, and done property names are plain strings, not symbols. Only Symbol.iterator, which is likely to be added to a lot of different objects, is an actual symbol.*/
+
+let okIterator = "Ok"[Symbol.iterator]();
+console.log(okIterator.next());
+console.log(okIterator.next());
+console.log(okIterator.next())
